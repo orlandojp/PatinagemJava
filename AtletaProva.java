@@ -7,13 +7,13 @@ public class AtletaProva {
 	private String numFederacao;
 	private String nome;
 	private String clube;
-	private BigDecimal teste;
-	private double juiz1A;
-	private double juiz1B;
-	private double juiz2A;
-	private double juiz2B;
-	private double juiz3A;
-	private double juiz3B;
+	private BigDecimal juiz1A;
+	private BigDecimal juiz1B;
+	private BigDecimal juiz2A;
+	private BigDecimal juiz2B;
+	private BigDecimal juiz3A;
+	private BigDecimal juiz3B;
+	private BigDecimal totalJuizes;
 	
 	//Construtores
 	public AtletaProva(){
@@ -21,20 +21,17 @@ public class AtletaProva {
 		this.numFederacao = new String();
 		this.nome = new String();
 		this.clube = new String();
-		this.teste = new BigDecimal(0);
-		this.juiz1A = 0.0;
-		this.juiz1B = 0.0;
-		this.juiz2A = 0.0;
-		this.juiz2B = 0.0;
-		this.juiz3A = 0.0;
-		this.juiz3B = 0.0;
+		this.juiz1A = new BigDecimal(0);
+		this.juiz1A = new BigDecimal(0);
+		this.juiz1B = new BigDecimal(0);
+		this.juiz2A = new BigDecimal(0);
+		this.juiz2B = new BigDecimal(0);
+		this.juiz3A = new BigDecimal(0);
+		this.juiz3B = new BigDecimal(0);
+		this.totalJuizes = new BigDecimal(0);
 	}
 	
 	//Getters
-	
-	public BigDecimal getTeste(){
-		return teste;
-	}
 	
 	/**
 	 * @return the numSaida
@@ -67,50 +64,53 @@ public class AtletaProva {
 	/**
 	 * @return the juiz1A
 	 */
-	public double getJuiz1A() {
+	public BigDecimal getJuiz1A() {
 		return juiz1A;
 	}
 	
 	/**
 	 * @return the juiz1B
 	 */
-	public double getJuiz1B() {
+	public BigDecimal getJuiz1B() {
 		return juiz1B;
 	}
 	
 	/**
 	 * @return the juiz2A
 	 */
-	public double getJuiz2A() {
+	public BigDecimal getJuiz2A() {
 		return juiz2A;
 	}
 	
 	/**
 	 * @return the juiz2B
 	 */
-	public double getJuiz2B() {
+	public BigDecimal getJuiz2B() {
 		return juiz2B;
 	}
 	
 	/**
 	 * @return the juiz3A
 	 */
-	public double getJuiz3A() {
+	public BigDecimal getJuiz3A() {
 		return juiz3A;
 	}
 	
 	/**
 	 * @return the juiz3B
 	 */
-	public double getJuiz3B() {
+	public BigDecimal getJuiz3B() {
 		return juiz3B;
 	}
 	
-	//Setters
-	
-	public void setTeste(String teste){
-		this.teste = new BigDecimal(teste);
+	/**
+	 * @return the totalJuizes
+	 */
+	public BigDecimal getTotalJuizes() {
+		return totalJuizes;
 	}
+	
+	//Setters
 	
 	/**
 	 * @param numSaida the numSaida to set
@@ -143,43 +143,47 @@ public class AtletaProva {
 	/**
 	 * @param juiz1a the juiz1A to set
 	 */
-	public void setJuiz1A(double juiz1a) {
-		juiz1A = juiz1a;
+	public void setJuiz1A(String juiz1A) {
+		this.juiz1A = new BigDecimal(juiz1A);
 	}
-	
+
 	/**
 	 * @param juiz1b the juiz1B to set
 	 */
-	public void setJuiz1B(double juiz1b) {
-		juiz1B = juiz1b;
+	public void setJuiz1B(String juiz1B) {
+		this.juiz1B = new BigDecimal(juiz1B);
 	}
 	
 	/**
 	 * @param juiz2a the juiz2A to set
 	 */
-	public void setJuiz2A(double juiz2a) {
-		juiz2A = juiz2a;
+	public void setJuiz2A(String juiz2A) {
+		this.juiz2A = new BigDecimal(juiz2A);
 	}
 	
 	/**
 	 * @param juiz2b the juiz2B to set
 	 */
-	public void setJuiz2B(double juiz2b) {
-		juiz2B = juiz2b;
+	public void setJuiz2B(String juiz2B) {
+		this.juiz2B = new BigDecimal(juiz2B);
 	}
 	
 	/**
 	 * @param juiz3a the juiz3A to set
 	 */
-	public void setJuiz3A(double juiz3a) {
-		juiz3A = juiz3a;
+	public void setJuiz3A(String juiz3A) {
+		this.juiz3A = new BigDecimal(juiz3A);
 	}
 	
 	/**
 	 * @param juiz3b the juiz3B to set
 	 */
-	public void setJuiz3B(double juiz3b) {
-		juiz3B = juiz3b;
+	public void setJuiz3B(String juiz3B) {
+		this.juiz3B = new BigDecimal(juiz3B);
+	}
+	
+	public void setTotalJuizes() {
+		this.totalJuizes = totalJuizes.add(getJuiz1A().add(juiz1B.add(juiz2A.add(juiz2B.add(juiz3A.add(juiz3B))))));
 	}
 
 	/* (non-Javadoc)
@@ -188,5 +192,40 @@ public class AtletaProva {
 	@Override
 	public String toString() {
 		return numSaida + "\t" + numFederacao + "\t" +  nome + "\t" + clube + "\t" + juiz1A + "\t" + juiz2A + "\t" + juiz3A + "\t" + juiz1B + "\t" + juiz2B + "\t" + juiz3B;
+	}
+	
+	public static double comparaNotas(AtletaProva atleta1, AtletaProva atleta2){
+		double vitorias = 0;
+		BigDecimal juiz1Atleta1 = new BigDecimal(0);
+		BigDecimal juiz2Atleta1 = new BigDecimal(0);
+		BigDecimal juiz3Atleta1 = new BigDecimal(0);
+		BigDecimal juiz1Atleta2 = new BigDecimal(0);
+		BigDecimal juiz2Atleta2 = new BigDecimal(0);
+		BigDecimal juiz3Atleta2 = new BigDecimal(0);
+		juiz1Atleta1 = atleta1.getJuiz1A().add(atleta1.getJuiz1B());
+		juiz2Atleta1 = atleta1.getJuiz2A().add(atleta1.getJuiz2B());
+		juiz3Atleta1 = atleta1.getJuiz3A().add(atleta1.getJuiz3B());
+		juiz1Atleta2 = atleta2.getJuiz1A().add(atleta2.getJuiz1B());
+		juiz2Atleta2 = atleta2.getJuiz2A().add(atleta2.getJuiz2B());
+		juiz3Atleta2 = atleta2.getJuiz3A().add(atleta2.getJuiz3B());
+		if (juiz1Atleta1.compareTo(juiz1Atleta2) > 0 || (juiz1Atleta1.compareTo(juiz1Atleta2) == 0 && atleta1.getJuiz1B().compareTo(atleta2.getJuiz1B()) > 0)){
+			vitorias += 1;
+		}
+		if (juiz1Atleta1.compareTo(juiz1Atleta2) == 0 && atleta1.getJuiz1B().compareTo(atleta2.getJuiz1B()) == 0){
+			vitorias += 0.5;
+		}
+		if (juiz2Atleta1.compareTo(juiz2Atleta2) > 0 || (juiz2Atleta1.compareTo(juiz2Atleta2) == 0 && atleta1.getJuiz2B().compareTo(atleta2.getJuiz2B()) > 0)){
+			vitorias += 1;
+		}
+		if (juiz2Atleta1.compareTo(juiz2Atleta2) == 0 && atleta1.getJuiz2B().compareTo(atleta2.getJuiz2B()) == 0){
+			vitorias += 0.5;
+		}
+		if (juiz3Atleta1.compareTo(juiz3Atleta2) > 0 || (juiz3Atleta1.compareTo(juiz3Atleta2) == 0 && atleta1.getJuiz3B().compareTo(atleta2.getJuiz3B()) > 0)){
+			vitorias += 1;
+		}
+		if (juiz3Atleta1.compareTo(juiz3Atleta2) == 0 && atleta1.getJuiz3B().compareTo(atleta2.getJuiz3B()) == 0){
+			vitorias += 0.5;
+		}
+		return vitorias;
 	}
 }

@@ -75,6 +75,12 @@ public class AtletaSaida {
 	 */
 	@Override
 	public String toString() {
-		return numSaida + " " + numFederacao + " " +  nome + " " + clube;
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("%4d \t", numSaida));
+		//sb.append(numFederacao);
+		//sb.append("\t");
+		sb.append(String.format("%-35s \t", nome));
+		sb.append(String.format("%-5s", clube));
+		return sb.toString();
 	}
 }

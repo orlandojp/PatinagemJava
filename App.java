@@ -17,7 +17,7 @@ import java.util.TreeMap;
 
 public class App {
 
-	static ArrayList<AtletaProva> teste = new ArrayList<AtletaProva>();
+	static ArrayList<AtletaProva> listaAtletasCompetiram = new ArrayList<AtletaProva>();
 	static ArrayList<AtletaSaida> teste2 = new ArrayList<AtletaSaida>();
 	static TreeMap<Double, Collection<Integer>> classificacaoMap = new TreeMap<Double, Collection<Integer>>(Collections.reverseOrder());
 	
@@ -51,20 +51,20 @@ public class App {
 			System.out.println("Atleta: " + teste2.get(proximo).getNome() + " " + teste2.get(proximo).getClube());
 			System.out.println("Nota A");
 			System.out.println("Juiz 1: ");
-			atletaInserir.setJuiz1A(converteNota(sc.nextDouble()));
+			atletaInserir.setJuiz1A(sc.nextLine());
 			System.out.println("Juiz 2: ");
-			atletaInserir.setJuiz2A(converteNota(sc.nextDouble()));
+			atletaInserir.setJuiz2A(sc.nextLine());
 			System.out.println("Juiz 3: ");
-			atletaInserir.setJuiz3A(converteNota(sc.nextDouble()));
+			atletaInserir.setJuiz3A(sc.nextLine());
 			System.out.println("Nota B");
 			System.out.println("Juiz 1: ");
-			atletaInserir.setJuiz1B(converteNota(sc.nextDouble()));
+			atletaInserir.setJuiz1B(sc.nextLine());
 			System.out.println("Juiz 2: ");
-			atletaInserir.setJuiz2B(converteNota(sc.nextDouble()));
+			atletaInserir.setJuiz2B(sc.nextLine());
 			System.out.println("Juiz 3: ");
-			atletaInserir.setJuiz3B(converteNota(sc.nextDouble()));
+			atletaInserir.setJuiz3B(sc.nextLine());
 			proximo += 1;
-			teste.add(atletaInserir);
+			listaAtletasCompetiram.add(atletaInserir);
 			String atletaAEscrever = atletaInserir.toString();
 			// Abre o ficheiro especificado e o parametro true é para acrescentar a informação e não escrever por cima
 			FileWriter fw = new FileWriter(file, true);
@@ -78,57 +78,34 @@ public class App {
 				novoAtleta = false;
 			}
 		}
-		sc.close();
-		
+		sc.close();	
 	}
 	
 	public static void calculaClassificacao (){
 		
-		double matrizVitorias[][] = new double[teste.size()][teste.size()];
+		double matrizVitorias[][] = new double[listaAtletasCompetiram.size()][listaAtletasCompetiram.size()];
+		int totalZeros = 0;
 		
-		for (int linha = 0; linha < teste.size(); linha++){
-			for (int coluna = 0; coluna < teste.size(); coluna++){
+		for (int linha = 0; linha < listaAtletasCompetiram.size(); linha++){
+			AtletaProva atleta1 = listaAtletasCompetiram.get(linha);
+			for (int coluna = 0; coluna < listaAtletasCompetiram.size(); coluna++){
 				double vitorias = 0;
+				AtletaProva atleta2 = listaAtletasCompetiram.get(coluna);
 				if (linha != coluna){
-					if (teste.get(linha).getJuiz1A() + teste.get(linha).getJuiz1B() > teste.get(coluna).getJuiz1A() + teste.get(coluna).getJuiz1B() ||
-							(teste.get(linha).getJuiz1A() + teste.get(linha).getJuiz1B() == teste.get(coluna).getJuiz1A() + teste.get(coluna).getJuiz1B() &&
-									teste.get(linha).getJuiz1B() > teste.get(coluna).getJuiz1B())){
-						vitorias += 1;
-					}
-					if (teste.get(linha).getJuiz1A() + teste.get(linha).getJuiz1B() == teste.get(coluna).getJuiz1A() + teste.get(coluna).getJuiz1B() &&
-									teste.get(linha).getJuiz1B() == teste.get(coluna).getJuiz1B()){
-						vitorias += 0.5;
-					}
-					if (teste.get(linha).getJuiz2A() + teste.get(linha).getJuiz2B() > teste.get(coluna).getJuiz2A() + teste.get(coluna).getJuiz2B() ||
-							(teste.get(linha).getJuiz2A() + teste.get(linha).getJuiz2B() == teste.get(coluna).getJuiz2A() + teste.get(coluna).getJuiz2B() &&
-									teste.get(linha).getJuiz2B() > teste.get(coluna).getJuiz2B())){
-						vitorias += 1;
-					}
-					if (teste.get(linha).getJuiz2A() + teste.get(linha).getJuiz2B() == teste.get(coluna).getJuiz2A() + teste.get(coluna).getJuiz2B() &&
-									teste.get(linha).getJuiz2B() == teste.get(coluna).getJuiz2B()){
-						vitorias += 0.5;
-					}
-					if (teste.get(linha).getJuiz3A() + teste.get(linha).getJuiz3B() > teste.get(coluna).getJuiz3A() + teste.get(coluna).getJuiz3B() ||
-							(teste.get(linha).getJuiz3A() + teste.get(linha).getJuiz3B() == teste.get(coluna).getJuiz3A() + teste.get(coluna).getJuiz3B() &&
-									teste.get(linha).getJuiz3B() > teste.get(coluna).getJuiz3B())){
-						vitorias += 1;
-					}
-					if (teste.get(linha).getJuiz3A() + teste.get(linha).getJuiz3B() == teste.get(coluna).getJuiz3A() + teste.get(coluna).getJuiz3B() &&
-									teste.get(linha).getJuiz3B() == teste.get(coluna).getJuiz3B()){
-						vitorias += 0.5;
-					}
+					vitorias = AtletaProva.comparaNotas(atleta1, atleta2);
 				}
 				matrizVitorias[linha][coluna] = vitorias;
 			}
 		}
+		/*
 		// Teste de impressão da matriz
 		for (int i=0; i<matrizVitorias.length; i++) {
 		   for (int j=0; j<matrizVitorias[i].length; j++) {
 		      System.out.print(matrizVitorias[i][j] + "\t");
 		   }
 		   System.out.printf("\n");
-		}
-		
+		}*/
+
 		for (int linha = 0; linha < matrizVitorias.length;linha++){
 			double total = 0;
 			for( int coluna = 0; coluna < matrizVitorias.length;coluna++){
@@ -140,81 +117,59 @@ public class App {
 				} 
 			}
 			if(classificacaoMap.containsKey(total)){
-				classificacaoMap.get(total).add(teste.get(linha).getNumSaida());
+				classificacaoMap.get(total).add(listaAtletasCompetiram.get(linha).getNumSaida());
 			}
 			else{
 				classificacaoMap.put(total,new ArrayList<Integer>());
-				classificacaoMap.get(total).add(teste.get(linha).getNumSaida());
+				classificacaoMap.get(total).add(listaAtletasCompetiram.get(linha).getNumSaida());
 			}
 		}
-		
+
 		Set<Entry<Double, Collection<Integer>>> set = classificacaoMap.entrySet();
 	    Iterator<Entry<Double, Collection<Integer>>> i = set.iterator();
+	    
+	    if (classificacaoMap.containsKey(0.0)){
+	    	totalZeros = classificacaoMap.get(0.0).size();
+   	 	}
+	    
 	    while(i.hasNext()) {
 	         @SuppressWarnings("rawtypes")
 			 Map.Entry me = (Map.Entry)i.next();
 	         @SuppressWarnings("unchecked")
 			 ArrayList<Integer> atletasPorNotas = (ArrayList<Integer>) me.getValue();
+	         //System.out.printf("%.3f: ", me.getKey());
+	         //System.out.println(me.getValue());
 	         
 	         if (atletasPorNotas.size() == 1){
-	        	 System.out.println(teste.get(atletasPorNotas.get(0)-1).getNome());
+	        	 NotasAtleta.imprimeAtleta(atletasPorNotas.get(0) - 1, (Double) me.getKey() - totalZeros);
 	         }
 	         
 	         if (atletasPorNotas.size() == 2){
 	        	 double novasVitorias = 0;
-	        	 if (teste.get(atletasPorNotas.get(0) - 1).getJuiz1A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz1B() > teste.get(atletasPorNotas.get(1) - 1).getJuiz1A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz1B() ||
-	        			 (teste.get(atletasPorNotas.get(0) - 1).getJuiz1A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz1B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz1A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz1B() && 
-	        					 teste.get(atletasPorNotas.get(0) - 1).getJuiz1B() > teste.get(atletasPorNotas.get(1) - 1).getJuiz1B())){
-	        		 novasVitorias += 1;
-	        	 }
-	        	 if (teste.get(atletasPorNotas.get(0) - 1).getJuiz1A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz1B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz1A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz1B() && 
-	        					 teste.get(atletasPorNotas.get(0) - 1).getJuiz1B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz1B()){
-	        		 novasVitorias += 0.5;
-	        	 }
-	        	 if (teste.get(atletasPorNotas.get(0) - 1).getJuiz2A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz2B() > teste.get(atletasPorNotas.get(1) - 1).getJuiz2A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz2B() ||
-	        			 (teste.get(atletasPorNotas.get(0) - 1).getJuiz2A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz2B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz2A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz2B() && 
-	        					 teste.get(atletasPorNotas.get(0) - 1).getJuiz2B() > teste.get(atletasPorNotas.get(1) - 1).getJuiz2B())){
-	        		 novasVitorias += 1;
-	        	 }
-	        	 if (teste.get(atletasPorNotas.get(0) - 1).getJuiz2A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz2B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz2A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz2B() && 
-	        					 teste.get(atletasPorNotas.get(0) - 1).getJuiz2B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz2B()){
-	        		 novasVitorias += 0.5;
-	        	 }
-	        	 if (teste.get(atletasPorNotas.get(0) - 1).getJuiz3A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz3B() > teste.get(atletasPorNotas.get(1) - 1).getJuiz3A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz3B() ||
-	        			 (teste.get(atletasPorNotas.get(0) - 1).getJuiz3A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz3B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz3A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz3B() && 
-	        					 teste.get(atletasPorNotas.get(0) - 1).getJuiz3B() > teste.get(atletasPorNotas.get(1) - 1).getJuiz3B())){
-	        		 novasVitorias += 1;
-	        	 }
-	        	 if (teste.get(atletasPorNotas.get(0) - 1).getJuiz3A() + teste.get(atletasPorNotas.get(0) - 1).getJuiz3B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz3A() + teste.get(atletasPorNotas.get(1) - 1).getJuiz3B() && 
-	        					 teste.get(atletasPorNotas.get(0) - 1).getJuiz3B() == teste.get(atletasPorNotas.get(1) - 1).getJuiz3B()){
-	        		 novasVitorias += 0.5;
-	        	 }
-	        	 System.out.println(novasVitorias);
+	        	 AtletaProva atleta1 = listaAtletasCompetiram.get(atletasPorNotas.get(0) - 1);
+	        	 AtletaProva atleta2 = listaAtletasCompetiram.get(atletasPorNotas.get(1) - 1);
+	        	 
+	        	 novasVitorias = AtletaProva.comparaNotas(atleta1, atleta2);
 	        	 if (novasVitorias >= 2){
-	        		 System.out.println(teste.get(atletasPorNotas.get(0) - 1).getNome());
-	        		 System.out.println(teste.get(atletasPorNotas.get(1) - 1).getNome());
+	        		 NotasAtleta.imprimeAtleta(atletasPorNotas.get(0) - 1, (Double) me.getKey() - totalZeros);
+	        		 NotasAtleta.imprimeAtleta(atletasPorNotas.get(1) - 1, (Double) me.getKey() - totalZeros);
 	        	 }
 	        	 else{
-	        		 System.out.println(teste.get(atletasPorNotas.get(1) - 1).getNome());
-	        		 System.out.println(teste.get(atletasPorNotas.get(0) - 1).getNome());
+	        		 NotasAtleta.imprimeAtleta(atletasPorNotas.get(1) - 1, (Double) me.getKey() - totalZeros);
+	        		 NotasAtleta.imprimeAtleta(atletasPorNotas.get(0) - 1, (Double) me.getKey() - totalZeros);
 	        	 }
 	         }
-	         /*
+	         
 	         if (atletasPorNotas.size() > 2){
-	        	 ArrayList<Double> desempate6 = NotasAtleta.desempateRegra6(atletasPorNotas);
-	        	 
-	        	 // Collections.max dá o valor máximo de uma colecção, neste caso do ArrayList desempate 6
-	        	 // que se for menor do que 2 é porque nenhum atleta consegue mais vitórias do que os adversários
+	        	 ArrayList<Double> desempate6 = NotasAtleta.desempateRegra6(atletasPorNotas);        	 
 	        	 if (Collections.max(desempate6) < 1.5){
-	        		 TreeMap<Double, Integer> desempate7b10a = NotasAtleta.desempateRegra7b10a(atletasPorNotas);
+	        		 TreeMap<BigDecimal, Integer> desempate7b10a = NotasAtleta.desempateRegra7b10a(atletasPorNotas);
 	        		 while (desempate7b10a.size() > 0){
-	        			 System.out.println(teste.get(desempate7b10a.get(desempate7b10a.lastKey())).getNome());
+	        			 NotasAtleta.imprimeAtleta(desempate7b10a.get(desempate7b10a.lastKey()) - 1, (Double) me.getKey() - totalZeros);
 	        			 desempate7b10a.remove(desempate7b10a.lastKey());
 	        		 }
 	        	 }
-	         }*/
-	         System.out.printf("%.3f: ", me.getKey());
-	         System.out.println(me.getValue());
+	         }
 	      }
 	}
 	
@@ -222,30 +177,21 @@ public class App {
 		
 		//int proximo;
 		
-		teste = NotasAtleta.atletasCompetiram();
+		listaAtletasCompetiram = NotasAtleta.atletasCompetiram();
 		teste2 = NotasAtleta.atletasCompetir();
 		
-		if (teste.size() != 0){
-			for (AtletaProva atleta : teste){
+		if (listaAtletasCompetiram.size() != 0){
+			for (AtletaProva atleta : listaAtletasCompetiram){
 				System.out.println(atleta);
 			}	
 		}else{
 			System.out.println("Lista vazia");
 		}
 
-		//proximo = teste.size();
+		//proximo = listaAtletasCompetiram.size();
 		//leNotas(proximo);
 		
 		calculaClassificacao();
 		//MenuClube.start();
-		
-		BigDecimal t1, t2;
-		t1 = new BigDecimal("3");
-		t2 = new BigDecimal("2.7");
-		t1 = t1.add(t2);
-		AtletaProva novoAtleta = new AtletaProva();
-		novoAtleta.setTeste("2.9");
-		System.out.println(novoAtleta.getTeste());
-		System.out.println(t1 = t1.add(novoAtleta.getTeste()));
 	}
 }
